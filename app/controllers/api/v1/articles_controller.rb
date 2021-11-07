@@ -1,6 +1,7 @@
 module Api
     module V1
         class ArticlesController < ApplicationController
+
             def index
                 articles = Article.order('created_at DESC')
                 render json:
@@ -18,8 +19,11 @@ module Api
                 }, status: :ok
             end
 
+           before_action :authorized
+
             def create 
-                article = Article.new(article_params)
+                puts article_params
+                article = Article.new({ body: article_params[:body], title: article_params[:title], user_id: decoded_token[0]['user_id'] })
                 if article.save
                     render json:
                     {
@@ -57,7 +61,7 @@ module Api
             private
 
             def article_params
-                params.permit(:title, :body)
+                params.permit(:title, :body )
             end
         end
     end

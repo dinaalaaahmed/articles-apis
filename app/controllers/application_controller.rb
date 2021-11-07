@@ -14,6 +14,7 @@ class ApplicationController < ActionController::API
   def decoded_token
     if auth_header
       token = auth_header.split(' ')[1]
+
       # header: { 'Authorization': 'Bearer <token>' }
       begin
         JWT.decode(token, 'yourSecret', true, algorithm: 'HS256')
@@ -25,7 +26,8 @@ class ApplicationController < ActionController::API
 
   def logged_in_user
     if decoded_token
-      userId = decoded_token[0]['userId']
+
+      userId = decoded_token[0]['user_id']
       @user = User.find_by(id: userId)
     end
   end
